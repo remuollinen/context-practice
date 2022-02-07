@@ -1,15 +1,23 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import classes from "./AddTodo.module.css";
 import Button from "../UI/Button";
 
-const AddTodo = ({ addHandler }) => {
+import { NotesContext } from "../store/TodoStore";
+
+const AddTodo = () => {
 	const [todo, setTodo] = useState({ title: "", task: "" });
+	const context = useContext(NotesContext);
 
 	const changeHandler = (e) => {
 		const { name, value } = e.target;
 
 		setTodo((prevState) => ({ ...prevState, [name]: value }));
-		console.log(todo);
+		// console.log(todo);
+	};
+
+	const addHandler = (e) => {
+		e.preventDefault();
+		context.addTodoItem(todo);
 	};
 
 	return (
