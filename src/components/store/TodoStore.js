@@ -48,6 +48,16 @@ const reducer = (state, action) => {
 				...state,
 				notes: newTodos,
 			};
+		case "DONE_NOTE":
+			const updatedNotes = state.notes.map((note) => {
+				return note.id === action.id
+					? { ...note, done: !note.done }
+					: { ...note };
+			});
+			return {
+				...state,
+				notes: updatedNotes,
+			};
 		default:
 			return state;
 	}
@@ -70,10 +80,18 @@ export const Provider = ({ children }) => {
 		});
 	};
 
+	const doneToggle = (id) => {
+		dispatch({
+			type: "DONE_NOTE",
+			id: id,
+		});
+	};
+
 	const value = {
 		notes: state.notes,
 		addTodoItem: addTodoItem,
 		removeTodo: removeTodo,
+		doneToggle: doneToggle,
 	};
 
 	return (
