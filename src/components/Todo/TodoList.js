@@ -1,43 +1,28 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
 import classes from "./TodoList.module.css";
 import { NotesContext } from "../store/TodoStore";
 
 const TodoList = () => {
-	const context = useContext(NotesContext);
-	const [filteredTodos, setFilteredTodos] = useState(context.notes);
-	// console.log(context);
+	const ctx = useContext(NotesContext);
 
 	const removeHandler = (id) => {
-		context.removeTodo(id);
-	};
-
-	const filterHandler = (e) => {
-		// console.log(e.target.value);
-		if (e.target.value === "complete") {
-			setFilteredTodos(context.notes.filter((note) => note.done));
-		} else if (e.target.value === "incomplete") {
-			setFilteredTodos(context.notes.filter((note) => !note.done));
-		} else {
-			setFilteredTodos(context.notes);
-		}
+		ctx.removeTodo(id);
 	};
 
 	return (
 		<div className={classes.todos}>
 			<h1>Notes:</h1>
-			<select onChange={filterHandler}>
-				<option value="all">All</option>
-				<option value="complete">Completed</option>
-				<option value="incomplete">Not completed</option>
-			</select>
-			{context.notes.map((note) => {
+			{ctx.notes.map((note) => {
 				return (
 					<div
+						className={`${classes.todo} ${
+							note.done ? classes.done : classes.notDone
+						}`}
 						key={note.id}
-						className={`${classes.todo} ${note.done ? classes.done : ""}`}
+						onClick={() => ctx.doneTodo(note.id)}
 					>
-						<h2 onClick={() => context.doneToggle(note.id)}>{note.title}</h2>
+						<h2>{note.title}</h2>
 						<p>{note.task}</p>
 						<span
 							className={`material-icons ${classes.delete}`}

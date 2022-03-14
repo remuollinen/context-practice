@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useContext } from "react";
 import classes from "./AddTodo.module.css";
 import Button from "../UI/Button";
 
@@ -6,29 +6,31 @@ import { NotesContext } from "../store/TodoStore";
 
 const AddTodo = () => {
 	const [todo, setTodo] = useState({ title: "", task: "" });
-	const context = useContext(NotesContext);
+	const ctx = useContext(NotesContext);
 
 	const changeHandler = (e) => {
 		const { name, value } = e.target;
 
-		setTodo((prevState) => ({ ...prevState, [name]: value }));
-		// console.log(todo);
+		setTodo((prevState) => ({
+			...prevState,
+			[name]: value,
+		}));
 	};
 
 	const addHandler = (e) => {
 		e.preventDefault();
-		context.addTodoItem(todo);
+		ctx.addTodoItem(todo);
 	};
 
 	return (
 		<form onSubmit={addHandler} className={classes.input}>
 			<div>
 				<label htmlFor="title">Title</label>
-				<input onChange={changeHandler} type="text" id="title" name="title" />
+				<input type="text" id="title" name="title" onChange={changeHandler} />
 			</div>
 			<div>
 				<label htmlFor="task">Task</label>
-				<input onChange={changeHandler} type="text" id="task" name="task" />
+				<input type="text" id="task" name="task" onChange={changeHandler} />
 			</div>
 			<Button type="submit">Add Task</Button>
 		</form>

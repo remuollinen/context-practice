@@ -12,7 +12,7 @@ const initialState = {
 			id: 2,
 			title: "Clean app",
 			task: "Delete and clean unnecessary stuff",
-			done: false,
+			done: true,
 		},
 		{
 			id: 3,
@@ -39,24 +39,20 @@ const reducer = (state, action) => {
 				],
 			};
 		case "REMOVE_NOTE":
-			const newTodos = [...state.notes];
-			newTodos.splice(
-				newTodos.findIndex((item) => item.id === action.id),
-				1
-			);
+			const updateArray = state.notes.filter((item) => item.id !== action.id);
 			return {
 				...state,
-				notes: newTodos,
+				notes: updateArray,
 			};
 		case "DONE_NOTE":
-			const updatedNotes = state.notes.map((note) => {
-				return note.id === action.id
-					? { ...note, done: !note.done }
-					: { ...note };
+			const doneToggle = state.notes.map((item) => {
+				return item.id === action.id
+					? { ...item, done: !item.done }
+					: { ...item };
 			});
 			return {
 				...state,
-				notes: updatedNotes,
+				notes: doneToggle,
 			};
 		default:
 			return state;
@@ -79,8 +75,7 @@ export const Provider = ({ children }) => {
 			id: id,
 		});
 	};
-
-	const doneToggle = (id) => {
+	const doneTodo = (id) => {
 		dispatch({
 			type: "DONE_NOTE",
 			id: id,
@@ -91,7 +86,7 @@ export const Provider = ({ children }) => {
 		notes: state.notes,
 		addTodoItem: addTodoItem,
 		removeTodo: removeTodo,
-		doneToggle: doneToggle,
+		doneTodo: doneTodo,
 	};
 
 	return (
